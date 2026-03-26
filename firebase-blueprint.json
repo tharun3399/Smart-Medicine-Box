@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique identifier for the user" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "displayName": { "type": "string", "description": "User's full name" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the account was created" }
+      },
+      "required": ["uid", "email", "displayName", "createdAt"]
+    },
+    "Medication": {
+      "title": "Medication",
+      "description": "Details of a medication and its schedule",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the medication" },
+        "userId": { "type": "string", "description": "ID of the user who owns this medication" },
+        "name": { "type": "string", "description": "Name of the medicine" },
+        "dosage": { "type": "string", "description": "Dosage amount (e.g., 500mg)" },
+        "frequency": { "type": "string", "description": "How often to take (e.g., daily, twice a day)" },
+        "times": { "type": "array", "items": { "type": "string" }, "description": "List of times (HH:mm) to take the medicine" },
+        "remainingDoses": { "type": "integer", "description": "Number of doses left in the box" },
+        "totalDoses": { "type": "integer", "description": "Total capacity of the box for this medicine" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "name", "dosage", "frequency", "times", "remainingDoses", "totalDoses", "createdAt"]
+    },
+    "MedicationLog": {
+      "title": "MedicationLog",
+      "description": "Log of when a medication was taken",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "medicationId": { "type": "string" },
+        "takenAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["taken", "skipped", "missed"] }
+      },
+      "required": ["id", "userId", "medicationId", "takenAt", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "/medications/{medicationId}": {
+      "schema": "Medication",
+      "description": "Medication schedule documents"
+    },
+    "/logs/{logId}": {
+      "schema": "MedicationLog",
+      "description": "Medication intake logs"
+    }
+  }
+}
